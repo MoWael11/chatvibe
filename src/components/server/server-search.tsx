@@ -40,9 +40,9 @@ export const ServerSearch = ({ data }: ServerSearchProps) => {
 
   const onClick = ({ id, type }: { id: string; type: 'channel' | 'member' }) => {
     if (type === 'channel') {
-      router.push(`/server/${params.id}/channel/${id}`)
+      router.push(`/server/${params?.id}/channel/${id}`)
     } else {
-      router.push(`/server/${params.id}/conversations/${id}`)
+      router.push(`/server/${params?.id}/conversations/${id}`)
     }
   }
 
