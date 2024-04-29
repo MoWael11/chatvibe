@@ -1,14 +1,17 @@
-import { currentUser, redirectToSignIn } from '@clerk/nextjs'
 import { db } from '@/lib/db'
+import { auth, signIn } from 'auth'
 
 export const initialProfile = async () => {
-  const user = await currentUser()
-  if (!user) {
-    redirectToSignIn()
+  const session = await auth()
+
+  if (!session || !session.user?.email) {
+    signIn()
   } else {
+    const { user } = session
+
     const profile = await db.profile.findFirst({
       where: {
-        userId: user.id,
+        email: user?.email!,
       },
     })
 
@@ -16,10 +19,10 @@ export const initialProfile = async () => {
 
     const newProfile = await db.profile.create({
       data: {
-        userId: user.id,
-        name: `${user.firstName} ${user.lastName}`,
-        imageUrl: user.imageUrl,
-        email: user.emailAddresses[0].emailAddress,
+        userId: user.id ?? crypto.randomUUID(),
+        name: `${user.name}`,
+        imageUrl: user.image!,
+        email: user.email!,
       },
     })
 

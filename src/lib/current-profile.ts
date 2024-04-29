@@ -1,16 +1,16 @@
-import { auth } from '@clerk/nextjs'
+import { auth } from 'auth'
 import { db } from './db'
 
 export const currentProfile = async () => {
-  const { userId } = auth()
+  const session = await auth()
 
-  if (!userId) {
+  if (!session || !session.user?.email) {
     return null
   }
 
   const profile = await db.profile.findUnique({
     where: {
-      userId,
+      email: session?.user?.email,
     },
   })
 

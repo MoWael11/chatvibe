@@ -1,4 +1,4 @@
-import { currentProfilePages } from '@/lib/current-profile pages'
+import { currentProfilePages } from '@/lib/current-profile-pages'
 import { db } from '@/lib/db'
 import { NextApiResponseServerIO } from '@/types'
 import { NextApiRequest } from 'next'
@@ -8,8 +8,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponseS
     if (req.method !== 'POST') {
       return res.status(405).json({ error: 'Method not allowed' })
     }
-
-    const profile = await currentProfilePages(req)
+    const profile = await currentProfilePages(req, res)
 
     if (!profile) return res.status(401).json({ error: 'Unauthorized' })
 

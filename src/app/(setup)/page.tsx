@@ -5,12 +5,30 @@ import { redirect } from 'next/navigation'
 
 const Page = async () => {
   const profile = await initialProfile()
+  console.log(profile, 'f')
+  console.log('i got you')
+  console.log('i got you')
+  console.log('i got you')
+  console.log('i got you')
+  console.log('i got you')
+  console.log('i got you')
+  console.log('i got you')
+  console.log('i got you')
+  console.log('i got you')
+  console.log('i got you')
+  console.log('i got you')
+  console.log('i got you')
+  console.log('i got you')
+  console.log('i got you')
+  console.log('i got you')
+  console.log('i got you')
+  console.log('i got you')
 
   const server = await db.server.findFirst({
     where: {
       members: {
         some: {
-          profileId: profile!.id,
+          profileId: profile?.id,
         },
       },
     },

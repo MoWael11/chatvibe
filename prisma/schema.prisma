@@ -16,7 +16,7 @@ model Profile {
   userId    String   @unique
   name      String
   imageUrl  String
-  email     String
+  email     String  @unique
   createdAt DateTime @default(now())
   updateAt  DateTime @updatedAt
 
