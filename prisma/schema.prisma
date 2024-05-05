@@ -21,7 +21,7 @@ model Profile {
   updateAt  DateTime @updatedAt
 
   members Member[]
-  servers  Server[]
+  servers Server[]
   channels Channel[]
 
   @@map("user")

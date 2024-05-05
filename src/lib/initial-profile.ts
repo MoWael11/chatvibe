@@ -5,7 +5,7 @@ export const initialProfile = async () => {
   const session = await auth()
 
   if (!session || !session.user?.email) {
-    signIn()
+    await signIn()
   } else {
     const { user } = session
 

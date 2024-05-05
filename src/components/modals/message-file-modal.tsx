@@ -87,7 +87,7 @@ export const MessageFileModal = () => {
                   control={control}
                   name='fileUrl'
                   render={({ field }) => (
-                    <FormItem>
+                    <FormItem className='space-y-0 w-full'>
                       <FormControl>
                         <FileUpload endpoint='messageFile' value={field.value} onChange={field.onChange} />
                       </FormControl>

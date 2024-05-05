@@ -5,9 +5,8 @@ import { currentProfile } from '@/lib/current-profile'
 import { db } from '@/lib/db'
 import { redirect } from 'next/navigation'
 import { ModeToggle } from '../mode-toggle'
+import { UserAccountNav } from '../user-account-nav'
 import { NavitionAction } from './navigation-action'
-import { signOut } from 'auth'
-import { LogOut } from 'lucide-react'
 
 export const NavigationSidebar = async () => {
   const profile = await currentProfile()
@@ -35,18 +34,7 @@ export const NavigationSidebar = async () => {
       </ScrollArea>
       <div className='pb-3 mt-auto flex items-center flex-col gap-y-4'>
         <ModeToggle />
-        <form
-          action={async () => {
-            'use server'
-            await signOut()
-          }}
-        >
-          <button type='submit' className='group flex items-center'>
-            <div className='flex mx-3 h-[48px] w-[48px] rounded-[6px] transition-all items-center justify-center bg-background dark:bg-neutral-800 group-hover:bg-neutral-700'>
-              <LogOut className='text-white transition' size={25} />
-            </div>
-          </button>
-        </form>
+        <UserAccountNav email={profile.email} imageUrl={profile.imageUrl} name={profile?.name} />
       </div>
     </div>
   )
