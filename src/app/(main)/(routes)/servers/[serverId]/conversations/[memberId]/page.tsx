@@ -5,6 +5,7 @@ import { MediaRoom } from '@/components/media-room'
 import { getOrCreteConversation } from '@/lib/conversation'
 import { currentProfile } from '@/lib/current-profile'
 import { db } from '@/lib/db'
+import { Metadata } from 'next'
 import { redirect } from 'next/navigation'
 
 interface MembmerIdPageProps {
@@ -14,6 +15,22 @@ interface MembmerIdPageProps {
   }
   searchParams: {
     video?: boolean
+  }
+}
+
+export async function generateMetadata({ params: { memberId, serverId } }: MembmerIdPageProps): Promise<Metadata> {
+  const otherMember = await db.member.findUnique({
+    where: {
+      id: memberId,
+      serverId,
+    },
+    include: {
+      profile: true,
+    },
+  })
+
+  return {
+    title: `@ ${otherMember?.profile.name}`,
   }
 }
 

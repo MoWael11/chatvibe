@@ -32,6 +32,7 @@ interface ChatItemProps {
   isUpdated: boolean
   socketUrl: string
   socketQuery: Record<string, string>
+  type: 'channel' | 'conversation'
 }
 
 const roleIconMap = {
@@ -55,6 +56,7 @@ export const ChatItem = ({
   isUpdated,
   socketUrl,
   socketQuery,
+  type,
 }: ChatItemProps) => {
   const [isEditing, setIsEditing] = useState(false)
   const { onOpen } = useModal()
@@ -101,7 +103,7 @@ export const ChatItem = ({
   const isAdmin = currentMember.role === MemberRole.ADMIN
   const isModerator = currentMember.role === MemberRole.MODERATOR
   const isOwner = currentMember.id === member.id
-  const canDeleteMessage = !deleted && (isAdmin || isModerator || isOwner)
+  const canDeleteMessage = (!deleted && (isAdmin || isModerator) && type === 'channel') || isOwner
   const canEditMessage = !deleted && isOwner && !fileUrl
   const isPDF = fileType === 'pdf' && fileUrl
   const isImage = !isPDF && fileUrl

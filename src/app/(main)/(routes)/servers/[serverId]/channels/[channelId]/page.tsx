@@ -4,12 +4,33 @@ import { ChatMessages } from '@/components/chat/chat-messages'
 import { MediaRoom } from '@/components/media-room'
 import { currentProfile } from '@/lib/current-profile'
 import { db } from '@/lib/db'
+import { Metadata } from 'next'
 import { redirect } from 'next/navigation'
 
 interface ChannelIdPageProps {
   params: {
     serverId: string
     channelId: string
+  }
+}
+
+export async function generateMetadata({ params: { channelId, serverId } }: ChannelIdPageProps): Promise<Metadata> {
+  const channel = await db.channel.findUnique({
+    where: {
+      id: channelId,
+      serverId,
+    },
+  })
+
+  if (!channel)
+    return {
+      title: {
+        absolute: 'Channel not found',
+      },
+    }
+
+  return {
+    title: `${channel.type === 'TEXT' ? '#' : channel.type === 'AUDIO' ? '🎙️' : '📹'} ${channel.name}`,
   }
 }
 

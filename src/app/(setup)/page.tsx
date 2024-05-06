@@ -3,6 +3,12 @@ import { db } from '@/lib/db'
 import { initialProfile } from '@/lib/initial-profile'
 import { redirect } from 'next/navigation'
 
+export function metadata() {
+  return {
+    title: 'Create your first server',
+  }
+}
+
 const Page = async () => {
   const profile = await initialProfile()
 
