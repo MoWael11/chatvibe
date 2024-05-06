@@ -26,7 +26,7 @@ export const metadata: Metadata = {
   description:
     'ChatVibe is a messaging application that allows you to connect and chat with friends in real-time. Join the conversation!',
   verification: {
-    google: 'y4aTHKJO7CCEM6724r_e30hhF5UdSIUL5TpII02Vi7A',
+    google: 'FUyq9U6UIXphD70B5s1RKeaKUx5lO9lYXNz6vesAYb0',
   },
   manifest: '/manifest.json',
   generator: 'Next.js',
