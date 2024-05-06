@@ -62,8 +62,8 @@ export const metadata: Metadata = {
   classification: 'Chat App',
   openGraph: {
     images: {
-      url: '/images/main.png',
-      type: 'image/png',
+      url: '/images/main.webp',
+      type: 'image/webp',
     },
   },
   metadataBase: new URL(process.env.NEXT_PUBLIC_BASE_URL!),
@@ -77,6 +77,12 @@ export default function RootLayout({
   return (
     <SessionProvider>
       <html lang='en' suppressHydrationWarning>
+        <head>
+          {/* for PWA title bar color */}
+          <link rel='mask-icon' href='/safari-pinned-tab.svg' color='#1E1F22' />
+          <meta name='msapplication-TileColor' content='#1E1F22' />
+          <meta name='theme-color' content='#1E1F22' />
+        </head>
         <body className={cn(font.className, 'bg-white dark:bg-[#313338]')}>
           <ThemeProvider attribute='class' defaultTheme='dark' enableSystem={false} storageKey='discord-theme'>
             <ScocketProvider>
