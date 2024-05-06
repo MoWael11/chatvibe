@@ -1,6 +1,5 @@
 import { currentProfile } from '@/lib/current-profile'
 import { db } from '@/lib/db'
-import { signIn } from 'auth'
 import { redirect } from 'next/navigation'
 
 interface InviteCodeProps {
@@ -13,8 +12,7 @@ const InviteCodePage = async ({ params: { inviteCode } }: InviteCodeProps) => {
   const profile = await currentProfile()
 
   if (!profile) {
-    await signIn()
-    return
+    redirect('/api/auth/signin')
   }
 
   if (!inviteCode) return redirect('/')

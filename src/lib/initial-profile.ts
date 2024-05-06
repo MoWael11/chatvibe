@@ -1,11 +1,12 @@
 import { db } from '@/lib/db'
-import { auth, signIn } from 'auth'
+import { auth } from 'auth'
+import { redirect } from 'next/navigation'
 
 export const initialProfile = async () => {
   const session = await auth()
 
   if (!session || !session.user?.email) {
-    await signIn()
+    redirect('/api/auth/signin')
   } else {
     const { user } = session
 
