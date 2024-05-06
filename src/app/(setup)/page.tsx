@@ -10,21 +10,22 @@ export function metadata() {
 }
 
 const Page = async () => {
-  const profile = await initialProfile()
+  return <div>hi</div>
+  // const profile = await initialProfile()
 
-  const server = await db.server.findFirst({
-    where: {
-      members: {
-        some: {
-          profileId: profile?.id,
-        },
-      },
-    },
-  })
+  // const server = await db.server.findFirst({
+  //   where: {
+  //     members: {
+  //       some: {
+  //         profileId: profile?.id,
+  //       },
+  //     },
+  //   },
+  // })
 
-  if (server) return redirect(`/servers/${server.id}`)
+  // if (server) return redirect(`/servers/${server.id}`)
 
-  return <InitialModal />
+  // return <InitialModal />
 }
 
 export default Page

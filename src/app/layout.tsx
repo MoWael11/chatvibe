@@ -1,5 +1,5 @@
 import './globals.css'
-import type { Metadata } from 'next'
+import type { Metadata, Viewport } from 'next'
 import { Open_Sans } from 'next/font/google'
 
 import { cn } from '@/lib/utils'
@@ -11,6 +11,13 @@ import { SessionProvider } from '@/components/providers/session-provider'
 
 const font = Open_Sans({ subsets: ['latin'] })
 
+export const viewPort: Viewport = {
+  minimumScale: 1,
+  initialScale: 1,
+  width: 'device-width',
+  viewportFit: 'cover',
+}
+
 export const metadata: Metadata = {
   title: {
     template: 'ChatVibe | %s',
@@ -21,6 +28,7 @@ export const metadata: Metadata = {
   verification: {
     google: 'y4aTHKJO7CCEM6724r_e30hhF5UdSIUL5TpII02Vi7A',
   },
+  manifest: '/manifest.json',
   generator: 'Next.js',
   applicationName: 'ChatVibe',
   referrer: 'origin-when-cross-origin',
@@ -43,12 +51,12 @@ export const metadata: Metadata = {
     telephone: false,
   },
   icons: {
-    icon: '/icon/favicon.ico',
-    shortcut: '/icon/favicon.ico',
-    apple: '/icon/apple-touch-icon.png',
+    icon: '/icons/favicon.ico',
+    shortcut: '/icons/favicon.ico',
+    apple: '/icons/apple-touch-icon.png',
     other: {
-      rel: 'android-chrome-192x192.png',
-      url: '/icon/android-chrome-192x192.png',
+      rel: 'icon-192x192.png',
+      url: '/icons/icon-192x192.png',
     },
   },
   classification: 'Chat App',
