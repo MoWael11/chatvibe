@@ -1,9 +1,9 @@
-import { auth } from 'auth'
+import { authForPages } from 'auth'
 import { NextApiRequest, NextApiResponse } from 'next'
 import { db } from './db'
 
 export const currentProfilePages = async (req: NextApiRequest, res: NextApiResponse) => {
-  const session = await auth(req, res)
+  const session = await authForPages(req, res)
 
   if (!session || !session.user?.email) {
     return null

@@ -5,7 +5,6 @@
   "scripts": {
     "clean": "rm -r .next",
     "dev": "next dev",
-    "predev": "npm run clean",
     "build": "next build",
     "start": "next start",
     "lint": "next lint"
@@ -41,7 +40,7 @@
     "lucide-react": "^0.319.0",
     "moment": "^2.30.1",
     "next": "14.1.0",
-    "next-auth": "5.0.0-beta.17",
+    "next-auth": "4.24.7",
     "next-themes": "^0.2.1",
     "query-string": "^8.1.0",
     "react": "^18",

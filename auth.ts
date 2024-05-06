@@ -1,19 +1,8 @@
-import type { NextAuthConfig } from 'next-auth'
-import NextAuth from 'next-auth'
-import Google from 'next-auth/providers/google'
+import { authOptions } from '@/app/api/auth/[...nextauth]/options'
+import { NextApiRequest, NextApiResponse } from 'next'
+import { getServerSession } from 'next-auth'
 
-export const config = {
-  providers: [Google],
-  callbacks: {
-    authorized({ auth }) {
-      return !!auth
-    },
-    redirect({ url }) {
-      const baseUrl = process.env.NEXT_PUBLIC_BASE_URL
-      const { pathname } = new URL(url) // Getting the pathname part of the URL ex: /servers/32323kl4j32kljfkl
-      return `${baseUrl}${pathname}`
-    },
-  },
-} satisfies NextAuthConfig
+export const auth = async () => await getServerSession(authOptions)
 
-export const { handlers, auth, signIn, signOut } = NextAuth(config)
+export const authForPages = async (req: NextApiRequest, res: NextApiResponse) =>
+  await getServerSession(req, res, authOptions)

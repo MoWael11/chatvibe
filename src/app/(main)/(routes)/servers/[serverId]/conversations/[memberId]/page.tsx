@@ -5,7 +5,6 @@ import { MediaRoom } from '@/components/media-room'
 import { getOrCreteConversation } from '@/lib/conversation'
 import { currentProfile } from '@/lib/current-profile'
 import { db } from '@/lib/db'
-import { signIn } from 'auth'
 import { redirect } from 'next/navigation'
 
 interface MembmerIdPageProps {
@@ -22,8 +21,7 @@ const MembmerIdPage = async ({ params: { memberId, serverId }, searchParams: { v
   const profile = await currentProfile()
 
   if (!profile) {
-    await signIn()
-    return
+    redirect('/api/auth/signin')
   }
 
   const currentMember = await db.member.findUnique({
@@ -39,8 +37,7 @@ const MembmerIdPage = async ({ params: { memberId, serverId }, searchParams: { v
   })
 
   if (!currentMember) {
-    await signIn()
-    return
+    redirect('/api/auth/signin')
   }
 
   const conversation = await getOrCreteConversation(currentMember.id, memberId)

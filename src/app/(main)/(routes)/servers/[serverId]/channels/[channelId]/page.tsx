@@ -4,7 +4,6 @@ import { ChatMessages } from '@/components/chat/chat-messages'
 import { MediaRoom } from '@/components/media-room'
 import { currentProfile } from '@/lib/current-profile'
 import { db } from '@/lib/db'
-import { signIn } from 'auth'
 import { redirect } from 'next/navigation'
 
 interface ChannelIdPageProps {
@@ -18,8 +17,7 @@ const ChannelIdPage = async ({ params: { channelId, serverId } }: ChannelIdPageP
   const profile = await currentProfile()
 
   if (!profile) {
-    await signIn()
-    return
+    redirect('/api/auth/signin')
   }
 
   const channel = await db.channel.findUnique({
