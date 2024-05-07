@@ -19,4 +19,7 @@ export const authOptions = {
   session: {
     strategy: 'jwt',
   },
+  pages: {
+    signIn: '/sign-in',
+  },
 } satisfies NextAuthOptions
