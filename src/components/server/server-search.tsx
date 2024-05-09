@@ -4,6 +4,7 @@ import { Search } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { CommandDialog, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from '../ui/command'
 import { useParams, useRouter } from 'next/navigation'
+import { set } from 'react-hook-form'
 
 interface ServerSearchProps {
   data: {
@@ -40,10 +41,11 @@ export const ServerSearch = ({ data }: ServerSearchProps) => {
 
   const onClick = ({ id, type }: { id: string; type: 'channel' | 'member' }) => {
     if (type === 'channel') {
-      router.push(`/server/${params?.id}/channel/${id}`)
+      router.push(`/servers/${params?.serverId}/channels/${id}`)
     } else {
-      router.push(`/server/${params?.id}/conversations/${id}`)
+      router.push(`/servers/${params?.serverId}/conversations/${id}`)
     }
+    setOpen(false)
   }
 
   return (
