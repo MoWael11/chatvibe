@@ -14,7 +14,7 @@ export const ChatWelcome = ({ name, type }: ChatWelcomeProps) => {
         </div>
       )}
       <p className='text-xl md:text-3xl font-bold'>
-        {type == 'channel' ? 'Welocome to #' : ''}
+        {type == 'channel' ? 'Welcome to #' : ''}
         {name}
       </p>
       <p className='text-zinc-600 dark:text-zinc-400 text-sm'>
