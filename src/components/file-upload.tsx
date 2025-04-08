@@ -1,15 +1,10 @@
-import { useState } from 'react';
-import { useToast } from './ui/use-toast';
 import { useUploadThing } from '@/lib/uploadthing';
-import Dropzone from 'react-dropzone';
-import { Cloud, File, FileIcon, Loader2, X } from 'lucide-react';
-import { Progress } from './ui/progress';
-import { Dialog, DialogTrigger } from './ui/dialog';
-import { Button } from './ui/button';
-import { DialogContent } from '@radix-ui/react-dialog';
+import { Cloud, File, FileIcon, X } from 'lucide-react';
 import Image from 'next/image';
-import { cn } from '@/lib/utils';
-import { ProgressIndicator } from '@radix-ui/react-progress';
+import { useState } from 'react';
+import Dropzone from 'react-dropzone';
+import { Progress } from './ui/progress';
+import { useToast } from './ui/use-toast';
 
 export const FileUpload = ({
   endpoint,
@@ -43,44 +38,6 @@ export const FileUpload = ({
     return interval;
   };
 
-  if (value && fileType !== 'pdf') {
-    return (
-      <div className="relative h-20 w-20 m-auto">
-        <Image fill src={value} alt="Upload" className="rounded-full" />
-        <button
-          onClick={() => onChange('')}
-          className="bg-rose-500 text-white p-1 rounded-full absolute top-0 right-0 shadow-sm"
-          type="button"
-        >
-          <X className="h-4 w-4" />
-        </button>
-      </div>
-    );
-  }
-
-  if (value && fileType === 'pdf') {
-    return (
-      <div className="relative flex items-center p-2 mt-2 rounded-md bg-background/10 m-auto">
-        <FileIcon className="h-10 w-10 fill-indigo-200 stroke-indigo-400" />
-        <a
-          href={value}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="ml-2 text-sm text-indigo-500 dark:text-indigo-400 hover:underline"
-        >
-          {value.split('/').pop()}
-        </a>
-        <button
-          onClick={() => onChange('')}
-          className="bg-rose-500 text-white p-1 rounded-full absolute -top-2 -right-2 shadow-sm"
-          type="button"
-        >
-          <X className="h-4 w-4" />
-        </button>
-      </div>
-    );
-  }
-
   return (
     <Dropzone
       multiple={false}
@@ -100,6 +57,7 @@ export const FileUpload = ({
 
         const [fileRespone] = res;
 
+        // url deprecated but faster :)
         const { key, url } = fileRespone;
         if (!key)
           return toast({
@@ -115,7 +73,7 @@ export const FileUpload = ({
           onChange(url);
           setUploadProgress(0);
           setIsUploading(false);
-        }, 1000);
+        }, 500);
       }}
     >
       {({ getRootProps, getInputProps, acceptedFiles }) => (
