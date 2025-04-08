@@ -1,16 +1,16 @@
-import { InitialModal } from '@/components/modals/initial-modal'
-import { db } from '@/lib/db'
-import { initialProfile } from '@/lib/initial-profile'
-import { redirect } from 'next/navigation'
+import { InitialModal } from '@/components/modals/initial-modal';
+import { db } from '@/lib/db';
+import { initialProfile } from '@/lib/initial-profile';
+import { redirect } from 'next/navigation';
 
 export function metadata() {
   return {
     title: 'Create your first server',
-  }
+  };
 }
 
 const Page = async () => {
-  const profile = await initialProfile()
+  const profile = await initialProfile();
 
   const server = await db.server.findFirst({
     where: {
@@ -20,11 +20,11 @@ const Page = async () => {
         },
       },
     },
-  })
+  });
 
-  if (server) return redirect(`/servers/${server.id}`)
+  if (server) return redirect(`/servers/${server.id}`);
 
-  return <InitialModal />
-}
+  return <InitialModal />;
+};
 
-export default Page
+export default Page;

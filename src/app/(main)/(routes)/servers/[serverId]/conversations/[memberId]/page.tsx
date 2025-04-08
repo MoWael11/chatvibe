@@ -1,21 +1,21 @@
-import { ChatHeader } from '@/components/chat/chat-header'
-import { ChatInput } from '@/components/chat/chat-input'
-import { ChatMessages } from '@/components/chat/chat-messages'
-import { MediaRoom } from '@/components/media-room'
-import { getOrCreteConversation } from '@/lib/conversation'
-import { currentProfile } from '@/lib/current-profile'
-import { db } from '@/lib/db'
-import { Metadata } from 'next'
-import { redirect } from 'next/navigation'
+import { ChatHeader } from '@/components/chat/chat-header';
+import { ChatInput } from '@/components/chat/chat-input';
+import { ChatMessages } from '@/components/chat/chat-messages';
+import { MediaRoom } from '@/components/media-room';
+import { getOrCreteConversation } from '@/lib/conversation';
+import { currentProfile } from '@/lib/current-profile';
+import { db } from '@/lib/db';
+import { Metadata } from 'next';
+import { redirect } from 'next/navigation';
 
 interface MembmerIdPageProps {
   params: {
-    memberId: string
-    serverId: string
-  }
+    memberId: string;
+    serverId: string;
+  };
   searchParams: {
-    video?: boolean
-  }
+    video?: boolean;
+  };
 }
 
 export async function generateMetadata({ params: { memberId, serverId } }: MembmerIdPageProps): Promise<Metadata> {
@@ -27,18 +27,18 @@ export async function generateMetadata({ params: { memberId, serverId } }: Membm
     include: {
       profile: true,
     },
-  })
+  });
 
   return {
     title: `@ ${otherMember?.profile.name}`,
-  }
+  };
 }
 
 const MembmerIdPage = async ({ params: { memberId, serverId }, searchParams: { video } }: MembmerIdPageProps) => {
-  const profile = await currentProfile()
+  const profile = await currentProfile();
 
   if (!profile) {
-    redirect('/api/auth/signin')
+    redirect('/api/auth/signin');
   }
 
   const currentMember = await db.member.findUnique({
@@ -51,24 +51,24 @@ const MembmerIdPage = async ({ params: { memberId, serverId }, searchParams: { v
     include: {
       profile: true,
     },
-  })
+  });
 
   if (!currentMember) {
-    redirect('/api/auth/signin')
+    redirect('/api/auth/signin');
   }
 
-  const conversation = await getOrCreteConversation(currentMember.id, memberId)
+  const conversation = await getOrCreteConversation(currentMember.id, memberId);
 
-  if (!conversation) return redirect(`/server/${serverId}`)
+  if (!conversation) return redirect(`/server/${serverId}`);
 
-  const { memberOne, memberTwo } = conversation
+  const { memberOne, memberTwo } = conversation;
 
-  const otherMember = memberOne.id === currentMember.id ? memberTwo : memberOne
+  const otherMember = memberOne.id === currentMember.id ? memberTwo : memberOne;
 
   return (
-    <div className='bg-white dark:bg-[#313338] flex flex-col h-full'>
+    <div className="bg-white dark:bg-[#313338] flex flex-col h-full">
       <ChatHeader
-        type='conversation'
+        type="conversation"
         imageUrl={otherMember.profile.imageUrl}
         name={otherMember.profile.name}
         serverId={serverId}
@@ -79,20 +79,20 @@ const MembmerIdPage = async ({ params: { memberId, serverId }, searchParams: { v
           <ChatMessages
             member={currentMember}
             name={otherMember.profile.name}
-            type='conversation'
+            type="conversation"
             chatId={conversation.id}
-            apiUrl='/api/direct-messages'
-            paramKey='conversationId'
+            apiUrl="/api/direct-messages"
+            paramKey="conversationId"
             paramValue={conversation.id}
-            socketUrl='/api/socket/direct-messages'
+            socketUrl="/api/socket/direct-messages"
             socketQuery={{
               conversationId: conversation.id,
             }}
           />
           <ChatInput
             name={otherMember.profile.name}
-            type='converstation'
-            apiUrl='/api/socket/direct-messages'
+            type="converstation"
+            apiUrl="/api/socket/direct-messages"
             query={{
               conversationId: conversation.id,
             }}
@@ -100,7 +100,7 @@ const MembmerIdPage = async ({ params: { memberId, serverId }, searchParams: { v
         </>
       )}
     </div>
-  )
-}
+  );
+};
 
-export default MembmerIdPage
+export default MembmerIdPage;

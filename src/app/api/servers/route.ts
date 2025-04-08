@@ -1,14 +1,14 @@
-import { currentProfile } from '@/lib/current-profile'
-import { db } from '@/lib/db'
-import { NextResponse } from 'next/server'
+import { currentProfile } from '@/lib/current-profile';
+import { db } from '@/lib/db';
+import { NextResponse } from 'next/server';
 
 export async function POST(req: Request) {
   try {
-    const { name, imageUrl } = await req.json()
-    const profile = await currentProfile()
+    const { name, imageUrl } = await req.json();
+    const profile = await currentProfile();
 
     if (!profile) {
-      return new NextResponse('Unauthorized', { status: 401 })
+      return new NextResponse('Unauthorized', { status: 401 });
     }
 
     const server = await db.server.create({
@@ -32,11 +32,11 @@ export async function POST(req: Request) {
           },
         },
       },
-    })
+    });
 
-    return NextResponse.json(server, { status: 201 })
+    return NextResponse.json(server, { status: 201 });
   } catch (err) {
-    console.log('[SERVERS_POST]', err)
-    return new NextResponse('Internal Error', { status: 500 })
+    console.log('[SERVERS_POST]', err);
+    return new NextResponse('Internal Error', { status: 500 });
   }
 }

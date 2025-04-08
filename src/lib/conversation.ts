@@ -1,13 +1,13 @@
-import { db } from '@/lib/db'
+import { db } from '@/lib/db';
 
 export const getOrCreteConversation = async (memberOneId: string, memberTwoId: string) => {
   const conversation =
-    (await findConversation(memberOneId, memberTwoId)) || (await findConversation(memberTwoId, memberOneId))
+    (await findConversation(memberOneId, memberTwoId)) || (await findConversation(memberTwoId, memberOneId));
   if (conversation) {
-    return conversation
+    return conversation;
   }
-  return createNewConversation(memberOneId, memberTwoId)
-}
+  return createNewConversation(memberOneId, memberTwoId);
+};
 
 const findConversation = async (memberOneId: string, memberTwoId: string) => {
   try {
@@ -28,11 +28,11 @@ const findConversation = async (memberOneId: string, memberTwoId: string) => {
           },
         },
       },
-    })
+    });
   } catch (err) {
-    return null
+    return null;
   }
-}
+};
 
 const createNewConversation = async (memberOneId: string, memberTwoId: string) => {
   try {
@@ -53,8 +53,8 @@ const createNewConversation = async (memberOneId: string, memberTwoId: string) =
           },
         },
       },
-    })
+    });
   } catch (err) {
-    return null
+    return null;
   }
-}
+};

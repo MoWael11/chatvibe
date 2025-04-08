@@ -1,27 +1,27 @@
-import { currentProfilePages } from '@/lib/current-profile-pages'
-import { db } from '@/lib/db'
-import { NextApiResponseServerIO } from '@/types'
-import { NextApiRequest } from 'next'
+import { currentProfilePages } from '@/lib/current-profile-pages';
+import { db } from '@/lib/db';
+import { NextApiResponseServerIO } from '@/types';
+import { NextApiRequest } from 'next';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponseServerIO) {
   try {
     if (req.method !== 'POST') {
-      return res.status(405).json({ error: 'Method not allowed' })
+      return res.status(405).json({ error: 'Method not allowed' });
     }
 
-    const profile = await currentProfilePages(req, res)
+    const profile = await currentProfilePages(req, res);
 
-    if (!profile) return res.status(401).json({ error: 'Unauthorized' })
+    if (!profile) return res.status(401).json({ error: 'Unauthorized' });
 
-    const { content, fileUrl } = req.body
-    const { conversationId } = req.query
+    const { content, fileUrl } = req.body;
+    const { conversationId } = req.query;
 
     if (!conversationId) {
-      return res.status(400).json({ error: 'Conversation ID is required' })
+      return res.status(400).json({ error: 'Conversation ID is required' });
     }
 
     if (!content) {
-      return res.status(400).json({ error: 'Content is required' })
+      return res.status(400).json({ error: 'Content is required' });
     }
 
     const conversation = await db.conversation.findFirst({
@@ -52,16 +52,16 @@ export default async function handler(req: NextApiRequest, res: NextApiResponseS
           },
         },
       },
-    })
+    });
 
     if (!conversation) {
-      return res.status(404).json({ error: 'Conversation not found' })
+      return res.status(404).json({ error: 'Conversation not found' });
     }
 
-    const member = conversation.memberOne.profileId === profile.id ? conversation.memberOne : conversation.memberTwo
+    const member = conversation.memberOne.profileId === profile.id ? conversation.memberOne : conversation.memberTwo;
 
     if (!member) {
-      return res.status(404).json({ error: 'Member not found' })
+      return res.status(404).json({ error: 'Member not found' });
     }
 
     const message = await db.directMessage.create({
@@ -76,14 +76,14 @@ export default async function handler(req: NextApiRequest, res: NextApiResponseS
           include: { profile: true },
         },
       },
-    })
+    });
 
-    const channelKey = `chat:${conversationId}:messages`
+    const channelKey = `chat:${conversationId}:messages`;
 
-    res?.socket?.server?.io?.emit(channelKey, message)
-    return res.status(200).json(message)
+    res?.socket?.server?.io?.emit(channelKey, message);
+    return res.status(200).json(message);
   } catch (err) {
-    console.log(err)
-    return res.status(500).json({ error: 'Internal server error' })
+    console.log(err);
+    return res.status(500).json({ error: 'Internal server error' });
   }
 }

@@ -1,22 +1,22 @@
-import { db } from '@/lib/db'
-import { auth } from 'auth'
-import { redirect } from 'next/navigation'
+import { db } from '@/lib/db';
+import { auth } from 'auth';
+import { redirect } from 'next/navigation';
 
 export const initialProfile = async () => {
-  const session = await auth()
+  const session = await auth();
 
   if (!session || !session.user?.email) {
-    redirect('/api/auth/signin')
+    redirect('/api/auth/signin');
   } else {
-    const { user } = session
+    const { user } = session;
 
     const profile = await db.profile.findFirst({
       where: {
         email: user?.email!,
       },
-    })
+    });
 
-    if (profile) return profile
+    if (profile) return profile;
 
     const newProfile = await db.profile.create({
       data: {
@@ -25,8 +25,8 @@ export const initialProfile = async () => {
         imageUrl: user.image!,
         email: user.email!,
       },
-    })
+    });
 
-    return newProfile
+    return newProfile;
   }
-}
+};

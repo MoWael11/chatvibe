@@ -1,12 +1,12 @@
-import { currentProfile } from '@/lib/current-profile'
-import { db } from '@/lib/db'
-import { redirect } from 'next/navigation'
+import { currentProfile } from '@/lib/current-profile';
+import { db } from '@/lib/db';
+import { redirect } from 'next/navigation';
 
 const ServerIdPage = async ({ params }: { params: { serverId: string } }) => {
-  const profile = await currentProfile()
+  const profile = await currentProfile();
 
   if (!profile) {
-    redirect('/api/auth/signin')
+    redirect('/api/auth/signin');
   }
 
   const server = await db.server.findUnique({
@@ -27,12 +27,12 @@ const ServerIdPage = async ({ params }: { params: { serverId: string } }) => {
         },
       },
     },
-  })
+  });
 
-  const initialChannel = server?.channels[0]
+  const initialChannel = server?.channels[0];
 
-  if (initialChannel?.name !== 'general') return null
+  if (initialChannel?.name !== 'general') return null;
 
-  return redirect(`/servers/${params.serverId}/channels/${initialChannel?.id}`)
-}
-export default ServerIdPage
+  return redirect(`/servers/${params.serverId}/channels/${initialChannel?.id}`);
+};
+export default ServerIdPage;

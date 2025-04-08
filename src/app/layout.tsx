@@ -1,22 +1,22 @@
-import './globals.css'
-import type { Metadata, Viewport } from 'next'
-import { Open_Sans } from 'next/font/google'
+import './globals.css';
+import type { Metadata, Viewport } from 'next';
+import { Open_Sans } from 'next/font/google';
 
-import { cn } from '@/lib/utils'
-import { ThemeProvider } from '@/components/providers/theme-provider'
-import { ModalProvider } from '@/components/providers/modal-provider'
-import { ScocketProvider } from '@/components/providers/socket-provider'
-import { QueryProvider } from '@/components/providers/query-provider'
-import { SessionProvider } from '@/components/providers/session-provider'
+import { cn } from '@/lib/utils';
+import { ThemeProvider } from '@/components/providers/theme-provider';
+import { ModalProvider } from '@/components/providers/modal-provider';
+import { ScocketProvider } from '@/components/providers/socket-provider';
+import { QueryProvider } from '@/components/providers/query-provider';
+import { SessionProvider } from '@/components/providers/session-provider';
 
-const font = Open_Sans({ subsets: ['latin'] })
+const font = Open_Sans({ subsets: ['latin'] });
 
 export const viewPort: Viewport = {
   minimumScale: 1,
   initialScale: 1,
   width: 'device-width',
   viewportFit: 'cover',
-}
+};
 
 export const metadata: Metadata = {
   title: {
@@ -67,24 +67,24 @@ export const metadata: Metadata = {
     },
   },
   metadataBase: new URL(process.env.NEXT_PUBLIC_BASE_URL!),
-}
+};
 
 export default function RootLayout({
   children,
 }: Readonly<{
-  children: React.ReactNode
+  children: React.ReactNode;
 }>) {
   return (
     <SessionProvider>
-      <html lang='en' suppressHydrationWarning>
+      <html lang="en" suppressHydrationWarning>
         <head>
           {/* for PWA title bar color */}
-          <link rel='mask-icon' href='/safari-pinned-tab.svg' color='#1E1F22' />
-          <meta name='msapplication-TileColor' content='#1E1F22' />
-          <meta name='theme-color' content='#1E1F22' />
+          <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#1E1F22" />
+          <meta name="msapplication-TileColor" content="#1E1F22" />
+          <meta name="theme-color" content="#1E1F22" />
         </head>
         <body className={cn(font.className, 'bg-white dark:bg-[#313338]')}>
-          <ThemeProvider attribute='class' defaultTheme='dark' enableSystem={false} storageKey='discord-theme'>
+          <ThemeProvider attribute="class" defaultTheme="dark" enableSystem={false} storageKey="discord-theme">
             <ScocketProvider>
               <ModalProvider />
               <QueryProvider>{children}</QueryProvider>
@@ -93,5 +93,5 @@ export default function RootLayout({
         </body>
       </html>
     </SessionProvider>
-  )
+  );
 }

@@ -1,38 +1,38 @@
-import { currentProfile } from '@/lib/current-profile'
-import { db } from '@/lib/db'
-import { Metadata } from 'next'
-import { redirect } from 'next/navigation'
+import { currentProfile } from '@/lib/current-profile';
+import { db } from '@/lib/db';
+import { Metadata } from 'next';
+import { redirect } from 'next/navigation';
 
 interface InviteCodeProps {
   params: {
-    inviteCode: string
-  }
+    inviteCode: string;
+  };
 }
 
 export async function generateMetadata({ params: { inviteCode } }: InviteCodeProps): Promise<Metadata> {
-  if (!inviteCode) redirect('/')
+  if (!inviteCode) redirect('/');
 
   const existingServer = await db.server.findFirst({
     where: {
       inviteCode,
     },
-  })
+  });
 
   return {
     title: {
       absolute: `${existingServer?.name} - Invite Code`,
     },
     description: `Invite code for ${existingServer?.name}`,
-  }
+  };
 }
 
 const InviteCodePage = async ({ params: { inviteCode } }: InviteCodeProps) => {
-  const profile = await currentProfile()
+  const profile = await currentProfile();
   if (!profile) {
-    redirect('/api/auth/signin')
+    redirect('/api/auth/signin');
   }
 
-  if (!inviteCode) return redirect('/')
+  if (!inviteCode) return redirect('/');
 
   const existingServer = await db.server.findFirst({
     where: {
@@ -43,9 +43,9 @@ const InviteCodePage = async ({ params: { inviteCode } }: InviteCodeProps) => {
         },
       },
     },
-  })
+  });
 
-  if (existingServer) return redirect(`/servers/${existingServer.id}`)
+  if (existingServer) return redirect(`/servers/${existingServer.id}`);
 
   const server = await db.server.update({
     where: {
@@ -58,9 +58,9 @@ const InviteCodePage = async ({ params: { inviteCode } }: InviteCodeProps) => {
         },
       },
     },
-  })
+  });
 
-  return redirect(`/servers/${server.id}`)
-}
+  return redirect(`/servers/${server.id}`);
+};
 
-export default InviteCodePage
+export default InviteCodePage;

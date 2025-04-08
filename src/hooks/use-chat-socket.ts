@@ -1,46 +1,46 @@
-import { useSocket } from '@/components/providers/socket-provider'
-import { Member, Message, Profile } from '@prisma/client'
-import { useQueryClient } from '@tanstack/react-query'
-import { useEffect } from 'react'
+import { useSocket } from '@/components/providers/socket-provider';
+import { Member, Message, Profile } from '@prisma/client';
+import { useQueryClient } from '@tanstack/react-query';
+import { useEffect } from 'react';
 
 type ChatSocketProps = {
-  addKey: string
-  updateKey: string
-  queryKey: string
-}
+  addKey: string;
+  updateKey: string;
+  queryKey: string;
+};
 
 type MessageWithMemberWithProfile = Message & {
   member: Member & {
-    profile: Profile
-  }
-}
+    profile: Profile;
+  };
+};
 
 export const useChatSocket = ({ addKey, queryKey, updateKey }: ChatSocketProps) => {
-  const { socket } = useSocket()
-  const queryClient = useQueryClient()
+  const { socket } = useSocket();
+  const queryClient = useQueryClient();
 
   useEffect(() => {
-    if (!socket) return
+    if (!socket) return;
 
     socket.on(updateKey, (message: MessageWithMemberWithProfile) => {
       queryClient.setQueriesData({ queryKey: [queryKey] }, (oldData: any) => {
         if (!oldData || !oldData.pages || oldData.pages.lenght === 0) {
-          return oldData
+          return oldData;
         }
         const newData = oldData.pages.map((page: any) => {
           return {
             ...page,
             items: page.items.map((item: MessageWithMemberWithProfile) => {
               if (item.id === message.id) {
-                return message
+                return message;
               }
-              return item
+              return item;
             }),
-          }
-        })
-        return { ...oldData, pages: newData }
-      })
-    })
+          };
+        });
+        return { ...oldData, pages: newData };
+      });
+    });
 
     socket.on(addKey, (message: MessageWithMemberWithProfile) => {
       queryClient.setQueriesData({ queryKey: [queryKey] }, (oldData: any) => {
@@ -51,24 +51,24 @@ export const useChatSocket = ({ addKey, queryKey, updateKey }: ChatSocketProps) 
                 items: [message],
               },
             ],
-          }
+          };
         }
 
-        const newData = [...oldData.pages]
+        const newData = [...oldData.pages];
 
         newData[0] = {
           ...newData[0],
           items: [message, ...newData[0].items],
-        }
+        };
 
-        return { ...oldData, pages: newData }
-      })
-    })
+        return { ...oldData, pages: newData };
+      });
+    });
 
     return () => {
       // Removes the specified listener from the listener array for the event named eventName.
-      socket.off(addKey)
-      socket.off(updateKey)
-    }
-  }, [queryClient, addKey, updateKey, queryKey, socket])
-}
+      socket.off(addKey);
+      socket.off(updateKey);
+    };
+  }, [queryClient, addKey, updateKey, queryKey, socket]);
+};
