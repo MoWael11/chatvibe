@@ -18,6 +18,7 @@ import { useForm } from 'react-hook-form';
 import * as z from 'zod';
 import { Form, FormControl, FormField, FormItem } from '../ui/form';
 import qs from 'query-string';
+import { useEffect } from 'react';
 
 const formSchema = z.object({
   fileUrl: z.string().min(1, {
@@ -46,8 +47,11 @@ export const MessageFileModal = () => {
     handleSubmit,
     control,
     reset,
+    watch,
     formState: { isLoading },
   } = form;
+
+  const [fileUrl] = watch(['fileUrl']);
 
   const onSubmit = async (values: formType) => {
     try {
@@ -66,6 +70,13 @@ export const MessageFileModal = () => {
       console.log(err);
     }
   };
+
+  useEffect(() => {
+    if (fileUrl) {
+      form.handleSubmit(onSubmit)();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [fileUrl]);
 
   const handleColse = () => {
     reset();
@@ -96,11 +107,6 @@ export const MessageFileModal = () => {
                 ></FormField>
               </div>
             </div>
-            <DialogFooter className="bg-gray-100 px-6 py-4">
-              <Button variant={'primary'} disabled={isLoading}>
-                Send
-              </Button>
-            </DialogFooter>
           </form>
         </Form>
       </DialogContent>

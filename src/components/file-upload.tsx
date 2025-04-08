@@ -1,6 +1,5 @@
 import { useUploadThing } from '@/lib/uploadthing';
-import { Cloud, File, FileIcon, X } from 'lucide-react';
-import Image from 'next/image';
+import { Cloud, File } from 'lucide-react';
 import { useState } from 'react';
 import Dropzone from 'react-dropzone';
 import { Progress } from './ui/progress';
@@ -15,8 +14,6 @@ export const FileUpload = ({
   onChange: (url?: string) => void;
   value?: string;
 }) => {
-  const fileType = value?.split('.').pop();
-
   const [isUploading, setIsUploading] = useState<boolean>(false);
   const [uploadProgress, setUploadProgress] = useState<number>(0);
   const { toast } = useToast();
@@ -72,12 +69,21 @@ export const FileUpload = ({
         setTimeout(() => {
           onChange(url);
           setUploadProgress(0);
-          setIsUploading(false);
         }, 500);
       }}
     >
       {({ getRootProps, getInputProps, acceptedFiles }) => (
-        <div {...getRootProps()} className="border h-64 m-4 border-dashed border-gray-300 rounded-lg">
+        <div
+          {...getRootProps({
+            onDrop: (event) => {
+              if (isUploading) return event.stopPropagation();
+            },
+            onClick: (event) => {
+              if (isUploading) event.stopPropagation();
+            },
+          })}
+          className="border h-64 m-4 border-dashed border-gray-300 rounded-lg"
+        >
           <div className="flex items-center justify-center h-full w-full">
             <label
               htmlFor="dropzone-file"
@@ -110,7 +116,7 @@ export const FileUpload = ({
                 </div>
               ) : null}
 
-              <input {...getInputProps()} className="hidden"></input>
+              <input {...getInputProps()} className="hidden" accept=".jpg, .jpeg, .png, .pdf"></input>
             </label>
           </div>
         </div>
