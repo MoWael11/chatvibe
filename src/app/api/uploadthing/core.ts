@@ -1,16 +1,17 @@
-import { auth } from 'auth'
-import { createUploadthing, type FileRouter } from 'uploadthing/next'
+import { auth } from 'auth';
+import { createUploadthing, type FileRouter } from 'uploadthing/next';
+import { UploadThingError } from 'uploadthing/server';
 
-const f = createUploadthing()
+const f = createUploadthing();
 
 const handleAuth = async () => {
-  const session = await auth()
+  const session = await auth();
   if (!session || !session.user?.email) {
-    throw new Error('Unauthorized')
+    throw new UploadThingError('Unauthorized');
   }
-  const userEmail = session.user.email
-  return { userEmail }
-}
+  const userEmail = session.user.email;
+  return { userEmail };
+};
 
 export const ourFileRouter = {
   serverImage: f({ image: { maxFileSize: '4MB', maxFileCount: 1 } })
@@ -19,6 +20,6 @@ export const ourFileRouter = {
   messageFile: f(['image', 'pdf'])
     .middleware(() => handleAuth())
     .onUploadComplete(() => {}),
-} satisfies FileRouter
+} satisfies FileRouter;
 
-export type OurFileRouter = typeof ourFileRouter
+export type OurFileRouter = typeof ourFileRouter;

@@ -4,5 +4,5 @@ export default function sitemap() {
       url: process.env.NEXT_PUBLIC_BASE_URL,
       lastModified: new Date().toISOString(),
     },
-  ]
+  ];
 }

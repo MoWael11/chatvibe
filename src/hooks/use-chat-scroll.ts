@@ -1,57 +1,57 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react';
 
 type ChatScrollProps = {
-  chatRef: React.RefObject<HTMLDivElement>
-  bottomRef: React.RefObject<HTMLDivElement>
-  shouldLoadMore: boolean
-  loadMore: () => void
-  count: number
-}
+  chatRef: React.RefObject<HTMLDivElement>;
+  bottomRef: React.RefObject<HTMLDivElement>;
+  shouldLoadMore: boolean;
+  loadMore: () => void;
+  count: number;
+};
 
 export const useChatScroll = ({ bottomRef, chatRef, count, loadMore, shouldLoadMore }: ChatScrollProps) => {
-  const [hasInitialized, setHasInitialized] = useState(false)
+  const [hasInitialized, setHasInitialized] = useState(false);
 
   useEffect(() => {
-    const topDiv = chatRef?.current
+    const topDiv = chatRef?.current;
 
     const handleScroll = () => {
       if (topDiv?.scrollTop === 0 && shouldLoadMore) {
-        loadMore()
+        loadMore();
       }
-    }
+    };
 
-    topDiv?.addEventListener('scroll', handleScroll)
+    topDiv?.addEventListener('scroll', handleScroll);
 
     return () => {
-      topDiv?.removeEventListener('scroll', handleScroll)
-    }
-  }, [chatRef, loadMore, shouldLoadMore])
+      topDiv?.removeEventListener('scroll', handleScroll);
+    };
+  }, [chatRef, loadMore, shouldLoadMore]);
 
   useEffect(() => {
-    const bottomDiv = bottomRef?.current
-    const topDiv = chatRef?.current
+    const bottomDiv = bottomRef?.current;
+    const topDiv = chatRef?.current;
 
     const shouldAutoScroll = () => {
       if (!hasInitialized && bottomDiv) {
-        setHasInitialized(true)
-        return true
+        setHasInitialized(true);
+        return true;
       }
 
       if (!topDiv) {
-        return false
+        return false;
       }
 
-      const distanceFromBottom = topDiv.scrollHeight - topDiv.scrollTop - topDiv.clientHeight
+      const distanceFromBottom = topDiv.scrollHeight - topDiv.scrollTop - topDiv.clientHeight;
 
-      return distanceFromBottom <= 100
-    }
+      return distanceFromBottom <= 100;
+    };
 
     if (shouldAutoScroll()) {
       setTimeout(() => {
         bottomRef.current?.scrollIntoView({
           behavior: 'smooth',
-        })
-      }, 100)
+        });
+      }, 100);
     }
-  }, [bottomRef, chatRef, count, hasInitialized])
-}
+  }, [bottomRef, chatRef, count, hasInitialized]);
+};

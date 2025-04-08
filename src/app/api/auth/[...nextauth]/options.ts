@@ -1,5 +1,5 @@
-import type { NextAuthOptions } from 'next-auth'
-import GoogleProvider from 'next-auth/providers/google'
+import type { NextAuthOptions } from 'next-auth';
+import GoogleProvider from 'next-auth/providers/google';
 
 export const authOptions = {
   providers: [
@@ -12,7 +12,7 @@ export const authOptions = {
           name: `${profile.given_name} ${profile.family_name}`,
           email: profile.email,
           image: profile.picture,
-        }
+        };
       },
     }),
   ],
@@ -22,4 +22,4 @@ export const authOptions = {
   pages: {
     signIn: '/sign-in',
   },
-} satisfies NextAuthOptions
+} satisfies NextAuthOptions;

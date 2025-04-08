@@ -1,7 +1,7 @@
-'use client'
+'use client';
 
-import { Channel, ChannelType, Server } from '@prisma/client'
-import { create } from 'zustand'
+import { Channel, ChannelType, Server } from '@prisma/client';
+import { create } from 'zustand';
 
 export type ModalType =
   | 'createServer'
@@ -14,22 +14,22 @@ export type ModalType =
   | 'deleteChannel'
   | 'editChannel'
   | 'messageFile'
-  | 'deleteMessage'
+  | 'deleteMessage';
 
 interface ModalData {
-  server?: Server
-  channel?: Channel
-  channelType?: ChannelType
-  apiUrl?: string
-  query?: Record<string, any>
+  server?: Server;
+  channel?: Channel;
+  channelType?: ChannelType;
+  apiUrl?: string;
+  query?: Record<string, any>;
 }
 
 interface ModalStrong {
-  type: ModalType | null
-  data: ModalData
-  isOpen: boolean
-  onOpen: (type: ModalType, data?: ModalData) => void
-  onClose: () => void
+  type: ModalType | null;
+  data: ModalData;
+  isOpen: boolean;
+  onOpen: (type: ModalType, data?: ModalData) => void;
+  onClose: () => void;
 }
 
 export const useModal = create<ModalStrong>((set) => ({
@@ -38,4 +38,4 @@ export const useModal = create<ModalStrong>((set) => ({
   isOpen: false,
   onOpen: (type, data = {}) => set({ isOpen: true, type, data }),
   onClose: () => set({ isOpen: false, type: null }),
-}))
+}));

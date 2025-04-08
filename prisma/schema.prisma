@@ -1,9 +1,5 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 generator client {
   provider = "prisma-client-js"
-  
 }
 
 datasource db {
@@ -12,37 +8,108 @@ datasource db {
 }
 
 model Profile {
-  id        String   @id @default(uuid())
-  userId    String   @unique
+  id        String    @id @default(uuid())
+  userId    String    @unique
   name      String
   imageUrl  String
-  email     String  @unique
-  createdAt DateTime @default(now())
-  updateAt  DateTime @updatedAt
-
-  members Member[]
-  servers Server[]
-  channels Channel[]
+  email     String    @unique
+  createdAt DateTime  @default(now())
+  updateAt  DateTime  @updatedAt
+  channels  Channel[]
+  members   Member[]
+  servers   Server[]
 
   @@map("user")
 }
 
 model Server {
-  id         String @id @default(uuid())
+  id         String    @id @default(uuid())
   name       String
   imageUrl   String
-  inviteCode String @unique
-
-  createdAt DateTime @default(now())
-  updateAt  DateTime @updatedAt
-
-  profileId String
-  profile   Profile @relation(fields: [profileId], references: [id], onDelete: Cascade)
-
-  members Member[]
-  channels Channel[]
+  inviteCode String    @unique
+  createdAt  DateTime  @default(now())
+  updateAt   DateTime  @updatedAt
+  profileId  String
+  channels   Channel[]
+  members    Member[]
+  profile    Profile   @relation(fields: [profileId], references: [id], onDelete: Cascade)
 
   @@map("server")
+}
+
+model Member {
+  id                    String          @id @default(uuid())
+  role                  MemberRole      @default(GUEST)
+  createdAt             DateTime        @default(now())
+  updateAt              DateTime        @updatedAt
+  profileId             String
+  serverId              String
+  conversationInitiated Conversation[]  @relation("MemberOne")
+  conversationReceived  Conversation[]  @relation("MemberTwo")
+  directMemssages       DirectMessage[]
+  profile               Profile         @relation(fields: [profileId], references: [id], onDelete: Cascade)
+  server                Server          @relation(fields: [serverId], references: [id], onDelete: Cascade)
+  messages              Message[]
+
+  @@unique([profileId, serverId])
+  @@map("member")
+}
+
+model Channel {
+  id        String      @id @default(uuid())
+  name      String
+  type      ChannelType @default(TEXT)
+  createdAt DateTime    @default(now())
+  updateAt  DateTime    @updatedAt
+  profileId String
+  serverId  String
+  profile   Profile     @relation(fields: [profileId], references: [id], onDelete: Cascade)
+  server    Server      @relation(fields: [serverId], references: [id], onDelete: Cascade)
+  messages  Message[]
+
+  @@map("channel")
+}
+
+model Message {
+  id        String   @id @default(uuid())
+  content   String
+  fileUrl   String?
+  memberId  String
+  channelId String
+  deleted   Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  channel   Channel  @relation(fields: [channelId], references: [id], onDelete: Cascade)
+  member    Member   @relation(fields: [memberId], references: [id], onDelete: Cascade)
+
+  @@map("message")
+}
+
+model Conversation {
+  id             String          @id @default(uuid())
+  memberOneId    String
+  memberTwoId    String
+  memberOne      Member          @relation("MemberOne", fields: [memberOneId], references: [id], onDelete: Cascade)
+  memberTwo      Member          @relation("MemberTwo", fields: [memberTwoId], references: [id], onDelete: Cascade)
+  directMessages DirectMessage[]
+
+  @@unique([memberOneId, memberTwoId])
+  @@map("conversation")
+}
+
+model DirectMessage {
+  id             String       @id @default(uuid())
+  content        String
+  fileUrl        String?
+  memberId       String
+  conversationId String
+  deleted        Boolean      @default(false)
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+  conversation   Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+  member         Member       @relation(fields: [memberId], references: [id], onDelete: Cascade)
+
+  @@map("direct-message")
 }
 
 enum MemberRole {
@@ -51,107 +118,8 @@ enum MemberRole {
   GUEST
 }
 
-model Member {
-  id   String     @id @default(uuid())
-  role MemberRole @default(GUEST)
-
-  createdAt DateTime @default(now())
-  updateAt  DateTime @updatedAt
-
-  profileId String
-  profile   Profile @relation(fields: [profileId], references: [id], onDelete: Cascade)
-
-  serverId String
-  server   Server @relation(fields: [serverId], references: [id], onDelete: Cascade)
-
-  messages Message[]
-
-  conversationInitiated Conversation[] @relation("MemberOne")
-  conversationReceived Conversation[] @relation("MemberTwo")
-
-  directMemssages DirectMessage[]
-
-  @@unique([profileId, serverId])
-
-  @@map("member")
-}
-
 enum ChannelType {
   TEXT
   AUDIO
   VIDEO
-}
-
-model Channel {
-  id   String      @id @default(uuid())
-  name String
-  type ChannelType @default(TEXT)
-
-  createdAt DateTime @default(now())
-  updateAt  DateTime @updatedAt
-
-  profileId String
-  profile   Profile @relation(fields: [profileId], references: [id], onDelete: Cascade)
-
-  serverId String
-  server   Server @relation(fields: [serverId], references: [id], onDelete: Cascade)
-
-  messages Message[]
-
-  @@map("channel")
-}
-
-model Message {
-  id String @id @default(uuid())
-  content String
-
-  fileUrl String?
-
-  memberId String
-  member Member @relation(fields: [memberId], references: [id], onDelete: Cascade)
-
-  channelId String
-  channel Channel @relation(fields: [channelId], references: [id], onDelete: Cascade)
-
-  deleted Boolean @default(false)
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  @@map("message")
-}
-
-model Conversation {
-  id String @id @default(uuid())
-
-  memberOneId String
-  memberOne Member @relation("MemberOne", fields: [memberOneId], references: [id], onDelete: Cascade)
-
-  memberTwoId String
-  memberTwo Member @relation("MemberTwo", fields: [memberTwoId], references: [id], onDelete: Cascade)
-
-  directMessages DirectMessage[]
-
-  @@unique([memberOneId, memberTwoId])
-
-  @@map("conversation")
-}
-
-model DirectMessage {
-  id String @id @default(uuid())
-  content String @db.Text
-  fileUrl String? @db.Text
-
-  memberId String
-  member Member @relation(fields: [memberId], references: [id], onDelete: Cascade)
-
-  conversationId String
-  conversation Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
-
-  deleted Boolean @default(false)
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  @@map("direct-message")
 }

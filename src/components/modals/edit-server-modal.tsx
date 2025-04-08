@@ -1,7 +1,7 @@
-'use client'
+'use client';
 
-import { FileUpload } from '@/components/file-upload'
-import { Button } from '@/components/ui/button'
+import { FileUpload } from '@/components/file-upload';
+import { Button } from '@/components/ui/button';
 import {
   Dialog,
   DialogContent,
@@ -9,24 +9,24 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from '@/components/ui/dialog'
-import { Input } from '@/components/ui/input'
-import { zodResolver } from '@hookform/resolvers/zod'
-import axios from 'axios'
-import { useRouter } from 'next/navigation'
-import { useForm } from 'react-hook-form'
-import * as z from 'zod'
-import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '../ui/form'
-import { useModal } from '@/hooks/use-modal-sotre'
-import { useEffect } from 'react'
+} from '@/components/ui/dialog';
+import { Input } from '@/components/ui/input';
+import { zodResolver } from '@hookform/resolvers/zod';
+import axios from 'axios';
+import { useRouter } from 'next/navigation';
+import { useForm } from 'react-hook-form';
+import * as z from 'zod';
+import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '../ui/form';
+import { useModal } from '@/hooks/use-modal-sotre';
+import { useEffect } from 'react';
 
 export const EditServerModal = () => {
-  const { isOpen, onClose, type, data } = useModal()
-  const { server } = data
+  const { isOpen, onClose, type, data } = useModal();
+  const { server } = data;
 
-  const { refresh } = useRouter()
+  const { refresh } = useRouter();
 
-  const isModalOpen = type === 'editServer' && isOpen
+  const isModalOpen = type === 'editServer' && isOpen;
 
   const formSchema = z.object({
     name: z.string().min(1, {
@@ -35,9 +35,9 @@ export const EditServerModal = () => {
     imageUrl: z.string().min(1, {
       message: 'Server image is required.',
     }),
-  })
+  });
 
-  type formType = z.infer<typeof formSchema>
+  type formType = z.infer<typeof formSchema>;
 
   const form = useForm({
     resolver: zodResolver(formSchema),
@@ -45,59 +45,59 @@ export const EditServerModal = () => {
       name: '',
       imageUrl: '',
     },
-  })
+  });
 
   useEffect(() => {
     if (server) {
-      form.setValue('name', server.name)
-      form.setValue('imageUrl', server.imageUrl)
+      form.setValue('name', server.name);
+      form.setValue('imageUrl', server.imageUrl);
     }
-  }, [server, form])
+  }, [server, form]);
 
   const {
     handleSubmit,
     control,
     reset,
     formState: { isLoading },
-  } = form
+  } = form;
 
   const onSubmit = async (values: formType) => {
     try {
-      await axios.patch(`/api/servers/${server?.id}`, values)
+      await axios.patch(`/api/servers/${server?.id}`, values);
 
-      reset()
-      refresh()
-      onClose()
+      reset();
+      refresh();
+      onClose();
     } catch (err) {
-      console.log(err)
+      console.log(err);
     }
-  }
+  };
 
   const handelClose = () => {
-    form.reset()
-    onClose()
-  }
+    form.reset();
+    onClose();
+  };
 
   return (
     <Dialog open={isModalOpen} onOpenChange={handelClose}>
-      <DialogContent className='bg-white text-black p-0 overflow-hidden'>
-        <DialogHeader className='pt-8 px-6'>
-          <DialogTitle className='text-2xl text-center font-bold'>Customize your server</DialogTitle>
-          <DialogDescription className='text-center text-zinc-500'>
+      <DialogContent className="bg-white text-black p-0 overflow-hidden">
+        <DialogHeader className="pt-8 px-6">
+          <DialogTitle className="text-2xl text-center font-bold">Customize your server</DialogTitle>
+          <DialogDescription className="text-center text-zinc-500">
             Give your server a personality with a name and an image. You can always change it later.
           </DialogDescription>
         </DialogHeader>
         <Form {...form}>
-          <form onSubmit={handleSubmit(onSubmit)} className='space-y-4'>
-            <div className='space-y-8 px-6'>
-              <div className='flex items-center justify-center text-center'>
+          <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+            <div className="space-y-8 px-6">
+              <div className="flex items-center justify-center text-center">
                 <FormField
                   control={control}
-                  name='imageUrl'
+                  name="imageUrl"
                   render={({ field }) => (
-                    <FormItem className='space-y-0 w-full'>
+                    <FormItem className="space-y-0 w-full">
                       <FormControl>
-                        <FileUpload endpoint='serverImage' value={field.value} onChange={field.onChange} />
+                        <FileUpload endpoint="serverImage" value={field.value} onChange={field.onChange} />
                       </FormControl>
                     </FormItem>
                   )}
@@ -106,17 +106,17 @@ export const EditServerModal = () => {
 
               <FormField
                 control={control}
-                name='name'
+                name="name"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className='uppercase text-xs font-bold text-zinc-500 dark:text-secondary/70'>
+                    <FormLabel className="uppercase text-xs font-bold text-zinc-500 dark:text-secondary/70">
                       Server name
                     </FormLabel>
                     <FormControl>
                       <Input
                         disabled={isLoading}
-                        className='bg-zinc-300/50 b-0 focus-visible:ring-0 text-black focus-visible:ring-offset-0'
-                        placeholder='Enter server name'
+                        className="bg-zinc-300/50 b-0 focus-visible:ring-0 text-black focus-visible:ring-offset-0"
+                        placeholder="Enter server name"
                         {...field}
                       />
                     </FormControl>
@@ -126,7 +126,7 @@ export const EditServerModal = () => {
                 )}
               />
             </div>
-            <DialogFooter className='bg-gray-100 px-6 py-4'>
+            <DialogFooter className="bg-gray-100 px-6 py-4">
               <Button variant={'primary'} disabled={isLoading}>
                 Save
               </Button>
@@ -135,5 +135,5 @@ export const EditServerModal = () => {
         </Form>
       </DialogContent>
     </Dialog>
-  )
-}
+  );
+};
