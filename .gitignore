@@ -16,6 +16,9 @@
 # production
 /build
 
+# prisma client
+/src/generated
+
 # misc
 .DS_Store
 *.pem
