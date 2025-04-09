@@ -106,11 +106,7 @@ export const FileUpload = ({
 
         clearInterval(progressInterval);
         setUploadProgress(100);
-
-        setTimeout(() => {
-          onChange(url);
-          setUploadProgress(0);
-        }, 500);
+        onChange(url);
       }}
     >
       {({ getRootProps, getInputProps, acceptedFiles }) => (

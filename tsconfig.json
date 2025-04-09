@@ -19,8 +19,7 @@
     ],
     "paths": {
       "@/*": ["./src/*"],
-      "auth": ["./auth.ts"],
-      "@prisma/client": ["./src/generated/prisma/client.d.ts"]
+      "auth": ["./auth.ts"]
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "src/server.js"],
