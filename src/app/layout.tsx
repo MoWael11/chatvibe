@@ -9,12 +9,6 @@ import { ScocketProvider } from '@/components/providers/socket-provider';
 import { QueryProvider } from '@/components/providers/query-provider';
 import { SessionProvider } from '@/components/providers/session-provider';
 
-// ssr for uplaodthing
-import { NextSSRPlugin } from '@uploadthing/react/next-ssr-plugin';
-import { extractRouterConfig } from 'uploadthing/server';
-
-import { ourFileRouter } from '@/app/api/uploadthing/core';
-
 const font = Open_Sans({ subsets: ['latin'] });
 
 export const viewPort: Viewport = {
@@ -93,10 +87,7 @@ export default function RootLayout({
           <ThemeProvider attribute="class" defaultTheme="dark" enableSystem={false} storageKey="discord-theme">
             <ScocketProvider>
               <ModalProvider />
-              <QueryProvider>
-                <NextSSRPlugin routerConfig={extractRouterConfig(ourFileRouter)} />
-                {children}
-              </QueryProvider>
+              <QueryProvider>{children}</QueryProvider>
             </ScocketProvider>
           </ThemeProvider>
         </body>

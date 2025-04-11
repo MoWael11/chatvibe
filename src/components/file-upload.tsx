@@ -95,7 +95,6 @@ export const FileUpload = ({
 
         const [fileRespone] = res;
 
-        // url deprecated but faster :)
         const { key, url } = fileRespone;
         if (!key)
           return toast({
